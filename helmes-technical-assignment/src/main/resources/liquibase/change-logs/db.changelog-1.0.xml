@@ -1,0 +1,56 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="1757507853677-1" author="alexa">
+        <createSequence incrementBy="50" sequenceName="sequence_generator" startValue="1"/>
+    </changeSet>
+    <changeSet id="1757507853677-2" author="alexa">
+        <createTable tableName="sectors">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_sectors"/>
+            </column>
+            <column name="label" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1757507853677-3" author="alexa">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_terms_agreed" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1757507853677-4" author="alexa">
+        <createTable tableName="users_sectors">
+            <column name="sector_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users_sectors"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_users_sectors"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1757507853677-5" author="alexa">
+        <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="sectors"
+                                 constraintName="FK_SECTORS_ON_PARENT" referencedColumnNames="id"
+                                 referencedTableName="sectors"/>
+    </changeSet>
+    <changeSet id="1757507853677-6" author="alexa">
+        <addForeignKeyConstraint baseColumnNames="sector_id" baseTableName="users_sectors"
+                                 constraintName="fk_usesec_on_sector" referencedColumnNames="id"
+                                 referencedTableName="sectors"/>
+    </changeSet>
+    <changeSet id="1757507853677-7" author="alexa">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="users_sectors"
+                                 constraintName="fk_usesec_on_user" referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+</databaseChangeLog>
