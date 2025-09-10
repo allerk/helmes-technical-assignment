@@ -5,11 +5,13 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
 
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @MappedSuperclass
+@Data
 @NoArgsConstructor
 public abstract class AbstractEntity {
     @Id
