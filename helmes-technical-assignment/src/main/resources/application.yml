@@ -18,8 +18,8 @@ spring:
         format_sql: true
 
   liquibase:
-    enabled: true
-    change-log: "classpath:/liquibase/changelog-master.yaml"
+    enabled: false
+    change-log: "classpath:/liquibase/changelog-master.yml"
     default-schema: public
 
   thymeleaf:
