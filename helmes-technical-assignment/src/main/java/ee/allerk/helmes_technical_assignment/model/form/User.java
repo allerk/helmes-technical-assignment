@@ -10,7 +10,9 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +20,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@SuperBuilder(toBuilder=true)
 @Table(name = "users")
 public class User extends AbstractEntity {
     @Column(name = "name", nullable = false)
@@ -32,5 +36,5 @@ public class User extends AbstractEntity {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "sector_id") }
     )
-    private Set<Sector> sectors = new HashSet<>();;
+    private Set<Sector> sectors = new HashSet<>();
 }
