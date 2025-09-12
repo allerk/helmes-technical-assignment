@@ -4,7 +4,9 @@ import ee.allerk.helmes_technical_assignment.model.common.AbstractEntity;
 import jakarta.persistence.*;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +14,8 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@SuperBuilder(toBuilder=true)
 @Table(name = "sectors")
 public class Sector extends AbstractEntity {
 

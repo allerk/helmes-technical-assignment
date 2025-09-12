@@ -7,12 +7,14 @@ import jakarta.persistence.Id;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @MappedSuperclass
 @Data
 @NoArgsConstructor
+@SuperBuilder(toBuilder=true)
 public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = SEQUENCE, generator = "sequenceGenerator")

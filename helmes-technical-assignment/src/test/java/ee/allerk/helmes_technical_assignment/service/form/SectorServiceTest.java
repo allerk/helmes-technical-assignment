@@ -1,7 +1,10 @@
 package ee.allerk.helmes_technical_assignment.service.form;
 
+import ee.allerk.helmes_technical_assignment.dto.form.SectorDto;
+import ee.allerk.helmes_technical_assignment.mapper.form.SectorMapper;
+import ee.allerk.helmes_technical_assignment.mapper.form.SectorMapperImpl;
 import ee.allerk.helmes_technical_assignment.model.form.Sector;
-import ee.allerk.helmes_technical_assignment.repository.SectorRepository;
+import ee.allerk.helmes_technical_assignment.repository.form.SectorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +30,7 @@ import java.util.Set;
 public class SectorServiceTest {
 
     @Spy
-    private SectorMapper sectorMapper;
+    private SectorMapper sectorMapper = new SectorMapperImpl();
 
     @Mock
     private SectorRepository sectorRepository;
@@ -121,13 +124,13 @@ public class SectorServiceTest {
                 sectorMapper.toDto(relatedSector)
         );
 
-        when(sectorRepository.findByUserId(userId)).thenReturn(sectors);
+        when(sectorRepository.findAllByUserId(userId)).thenReturn(sectors);
         when(sectorMapper.toDtos(anyList())).thenReturn(expectedDtos);
 
         List<SectorDto> results = sectorService.findUserSectors(userId);
 
-        verify(sectorRepository, times(1)).findByUserId(userId);
-        verify(sectorMapper, times(1)).toDtos(repoResult);
+        verify(sectorRepository, times(1)).findAllByUserId(userId);
+        verify(sectorMapper, times(1)).toDtos(sectors);
 
         assertNotNull(results);
         assertEquals(expectedDtos.size(), results.size());
