@@ -18,19 +18,19 @@ public class SectorService {
     private final SectorRepository sectorRepository;
     private final SectorMapper sectorMapper;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<SectorDto> findAll() {
         List<Sector> sectors = sectorRepository.findAll();
         return sectorMapper.toDtos(sectors);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<SectorDto> findUserSectors(Long userId) {
         List<Sector> sectors = sectorRepository.findAllByUserId(userId);
         return sectorMapper.toDtos(sectors);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Sector> findByIds(List<Long> ids) {
         return sectorRepository.findByIds(ids);
     }
