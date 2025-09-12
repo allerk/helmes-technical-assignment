@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface SectorRepository extends EntityRepository<Sector> {
@@ -13,5 +14,5 @@ public interface SectorRepository extends EntityRepository<Sector> {
     List<Sector> findAllByUserId(Long userId);
 
     @Query("SELECT s FROM Sector s WHERE s.id IN :ids")
-    List<Sector> findByIds(List<Long> ids);
+    List<Sector> findByIds(Set<Long> ids);
 }

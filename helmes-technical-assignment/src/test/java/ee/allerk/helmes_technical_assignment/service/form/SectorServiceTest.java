@@ -142,7 +142,7 @@ public class SectorServiceTest {
     @Test
     @DisplayName("Find by list of ids")
     void findByListOfIds() {
-        List<Long> ids = List.of(1L, 2L, 3L);
+        Set<Long> ids = Set.of(1L, 2L, 3L);
         Sector sector1 = Sector.builder()
                 .id(1L)
                 .label("Manufacturing")
@@ -152,7 +152,7 @@ public class SectorServiceTest {
                 .label("Construction materials")
                 .build();
         Sector sector3 = Sector.builder()
-                .id(2L)
+                .id(3L)
                 .label("Other")
                 .build();
 
@@ -160,11 +160,12 @@ public class SectorServiceTest {
 
         when(sectorRepository.findByIds(ids)).thenReturn(expectedResult);
 
-        List<Sector> results = sectorService.findByIds(ids);
+        Set<Sector> results = sectorService.findByIds(ids);
+        List<Sector> listedResult = new ArrayList<>(results);
 
         verify(sectorRepository, times(1)).findByIds(ids);
         assertNotNull(results);
         assertEquals(expectedResult.size(), results.size());
-        assertEquals("Construction materials", results.get(1).getLabel());
+        assertEquals("Construction materials", listedResult.get(1).getLabel());
     }
 }
