@@ -2,7 +2,7 @@ package ee.allerk.helmes_technical_assignment.service.setup;
 
 import ee.allerk.helmes_technical_assignment.dto.seeder.SectorNode;
 import ee.allerk.helmes_technical_assignment.model.form.Sector;
-import ee.allerk.helmes_technical_assignment.repository.SectorRepository;
+import ee.allerk.helmes_technical_assignment.repository.form.SectorRepository;
 import ee.allerk.helmes_technical_assignment.utils.SectorTsvParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
