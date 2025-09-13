@@ -11,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,10 +26,22 @@ public class UserService {
 
     @Transactional
     public UserDto create(UserDto userDto) {
-        // todo: validate if sector with no childrens selected then it can't be saved
         String name = userDto.getName();
         if (userRepository.findByName(name).isPresent()) {
             throw new AppException("User with name %s already exists".formatted(name), 409);
+        }
+        Set<Sector> sectors = sectorService.findByIds(userDto.getSectorIds());
+        List<String> invalidSectors = sectors.stream()
+                .filter(s -> !s.getChildren().isEmpty())
+                .map(Sector::getLabel)
+                .toList();
+
+        if (!invalidSectors.isEmpty()) {
+            throw new AppException(
+                    "The following sectors are parent sectors, select a leaf sector(s): "
+                            + String.join(", ", invalidSectors),
+                    302
+            );
         }
         User entity = userMapper.toEntity(userDto);
         User saved = userRepository.save(entity);

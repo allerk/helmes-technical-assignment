@@ -1,6 +1,7 @@
 package ee.allerk.helmes_technical_assignment.controller;
 
 import ee.allerk.helmes_technical_assignment.dto.form.UserDto;
+import ee.allerk.helmes_technical_assignment.exceptions.AppException;
 import ee.allerk.helmes_technical_assignment.service.form.SectorService;
 import ee.allerk.helmes_technical_assignment.service.form.UserService;
 import jakarta.validation.Valid;
@@ -34,7 +35,13 @@ public class WebController {
             return "index";
         }
 
-        userService.create(userDto);
+        try {
+            userService.create(userDto);
+        } catch (AppException e){
+            result.rejectValue("sectorIds", "invalid.sector", e.getMessage());
+            model.addAttribute("sectors", sectorService.findAll());
+            return "index";
+        }
         return "redirect:/index";
     }
 }
