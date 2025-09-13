@@ -1,5 +1,5 @@
 <th:block th:fragment="form(user, sectors)">
-    <form action="#" th:action="@{/addUser}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/}" th:object="${user}" method="post">
         <label for="name">Name</label>
         <input type="text" th:field="*{name}" id="name" placeholder="Name">
         <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
@@ -9,6 +9,7 @@
         <select id="sectors" multiple size="10" th:field="*{sectorIds}">
             <th:block th:insert="fragments/sector-options :: options(${sectors}, 0)"></th:block>
         </select>
+        <span th:if="${#fields.hasErrors('sectorIds')}" th:errors="*{sectorIds}"></span>
 
         <br/><br/>
         <input type="checkbox" th:field="*{termsAgreed}"> Agree to terms
