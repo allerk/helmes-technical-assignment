@@ -15,4 +15,8 @@ public interface SectorRepository extends EntityRepository<Sector> {
 
     @Query("SELECT s FROM Sector s WHERE s.id IN :ids")
     List<Sector> findByIds(Set<Long> ids);
+
+    @Override
+    @Query("SELECT s FROM Sector s WHERE s.parent IS NULL")
+    List<Sector> findAll();
 }

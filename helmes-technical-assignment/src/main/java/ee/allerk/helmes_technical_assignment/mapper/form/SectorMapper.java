@@ -6,6 +6,6 @@ import ee.allerk.helmes_technical_assignment.model.form.Sector;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {UserMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SectorMapper extends EntityMapper<Sector, SectorDto> {
 }

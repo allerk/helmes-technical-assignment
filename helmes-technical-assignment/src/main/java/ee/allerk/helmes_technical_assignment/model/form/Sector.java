@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -27,7 +28,8 @@ public class Sector extends AbstractEntity {
     private Sector parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Sector> children = new HashSet<>();
+    @OrderBy("id ASC")
+    private Set<Sector> children = new LinkedHashSet<>();
 
     @ManyToMany(mappedBy = "sectors")
     private Set<User> users = new HashSet<>();
