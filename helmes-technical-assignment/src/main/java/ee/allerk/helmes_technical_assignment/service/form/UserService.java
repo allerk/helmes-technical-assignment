@@ -24,12 +24,13 @@ public class UserService {
 
     @Transactional
     public UserDto create(UserDto userDto) {
+        // todo: validate if sector with no childrens selected then it can't be saved
         String name = userDto.getName();
         if (userRepository.findByName(name).isPresent()) {
             throw new AppException("User with name %s already exists".formatted(name), 409);
         }
-        User toEntity = userMapper.toEntity(userDto);
-        User saved = userRepository.save(toEntity);
+        User entity = userMapper.toEntity(userDto);
+        User saved = userRepository.save(entity);
         return userMapper.toDto(saved);
     }
 

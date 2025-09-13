@@ -59,37 +59,30 @@ public class UserServiceTest {
     private UserService userService;
 
 
-    @BeforeEach
-    public void iniMapperDependencies(){
-        ReflectionTestUtils.setField(userMapper,"sectorMapper",sectorMapper);
-        ReflectionTestUtils.setField(sectorMapper,"userMapper",userMapper);
-    }
+//    @BeforeEach
+//    public void iniMapperDependencies(){
+//        ReflectionTestUtils.setField(userMapper,"sectorMapper",sectorMapper);
+//    }
 
     @Test
     @DisplayName("Add new User")
     void addNewUser() {
-        Sector mockSector1Deep = Sector.builder()
+        Sector sector1 = Sector.builder()
                 .id(1L)
-                .label("Manufacturing")
+                .label("Electronics and Optics")
                 .build();
-        Sector mockSector2Deep1 = Sector.builder()
+        Sector sector2 = Sector.builder()
                 .id(2L)
-                .label("Construction materials")
+                .label("Beverages")
                 .build();
+        Set<Long> sectorIds = Set.of(sector1.getId(), sector2.getId());
 
-        mockSector2Deep1.setParent(mockSector1Deep);
-        Set<Sector> mockSector1DeepChilds = new HashSet<>();
-        mockSector1DeepChilds.add(mockSector2Deep1);
-        mockSector1Deep.setChildren(mockSector1DeepChilds);
+        UserDto userDto = UserDto.builder().name("Aleksandr").termsAgreed(true).sectorIds(sectorIds).build();
 
-        Set<SectorDto> sectorDtos = Set.of(
-                sectorMapper.toDto(mockSector1Deep),
-                sectorMapper.toDto(mockSector2Deep1)
-        );
-        UserDto userDto = UserDto.builder().name("Aleksandr").isTermsAgreed(true).sectors(sectorDtos).build();
         User toSave = userMapper.toEntity(userDto);
 
         User savedUser = userMapper.toEntity(userDto);
+        savedUser.setId(1L);
 
         UserDto expectedResult = userMapper.toDto(savedUser);
 
@@ -101,21 +94,22 @@ public class UserServiceTest {
 
         verify(userRepository).save(userCaptor.capture());
 
-        User toSaveEntity = userCaptor.getValue();
+        User toSaveCaptured = userCaptor.getValue();
 
         // NB! Number of calls displayed here is not the actual number of how many calls were called in userService.create method.
         // The actual number is: number == times(value) - number_of_mapper_call_...(either toEntity or toDto)
         verify(userMapper, times(3)).toEntity(userDto);
-        verify(userRepository, times(1)).save(toSaveEntity);
+        verify(userRepository, times(1)).save(toSaveCaptured);
         verify(userMapper, times(2)).toDto(savedUser);
 
+        assertEquals(toSave, toSaveCaptured);
         assertEquals(expectedResult, userSaved);
     }
 
     @Test
     @DisplayName("Add new User failed - user already exist")
     void addNewUserFailedUserAlreadyExist() {
-        UserDto userDto = UserDto.builder().name("Aleksandr").isTermsAgreed(true).build();
+        UserDto userDto = UserDto.builder().name("Aleksandr").termsAgreed(true).build();
         String errorMsg = "User with name %s already exists".formatted(userDto.getName());
 
         User user = userMapper.toEntity(userDto);
@@ -133,20 +127,16 @@ public class UserServiceTest {
     @Test
     @DisplayName("Remove sector from User")
     void removeSectorFromUser() {
-        User userToRemoveSectorFrom = User.builder().id(1L).name("Aleksandr").isTermsAgreed(true).build();
+        // todo: add test case if the child is deleted, then its parent is not presented in the sectorIds list
+        User userToRemoveSectorFrom = User.builder().id(1L).name("Aleksandr").termsAgreed(true).build();
         Sector mockSector1Deep = Sector.builder()
                 .id(1L)
-                .label("Manufacturing")
+                .label("Construction materials")
                 .build();
         Sector mockSector2Deep1 = Sector.builder()
                 .id(2L)
-                .label("Construction materials")
+                .label("Beverages")
                 .build();
-        mockSector2Deep1.setParent(mockSector1Deep);
-        Set<Sector> mockSector1DeepChilds = new HashSet<>();
-        mockSector1DeepChilds.add(mockSector2Deep1);
-        mockSector1Deep.setChildren(mockSector1DeepChilds);
-
         userToRemoveSectorFrom.setSectors(Set.of(
                 mockSector1Deep,
                 mockSector2Deep1
@@ -155,7 +145,7 @@ public class UserServiceTest {
         User userAfterRemove = User.builder()
                 .id(userToRemoveSectorFrom.getId())
                 .name(userToRemoveSectorFrom.getName())
-                .isTermsAgreed(userToRemoveSectorFrom.isTermsAgreed())
+                .termsAgreed(userToRemoveSectorFrom.isTermsAgreed())
                 .build();
         userAfterRemove.setSectors(Set.of(mockSector1Deep));
 
@@ -177,9 +167,9 @@ public class UserServiceTest {
 
         verify(userRepository, times(1)).save(toSaveEntity);
 
-        assertEquals(1, userWithRemovedSector.getSectors().size());
-        assertTrue(userWithRemovedSector.getSectors().contains(sectorMapper.toDto(mockSector1Deep)));
-        assertFalse(userWithRemovedSector.getSectors().contains(sectorMapper.toDto(mockSector2Deep1)));
+        assertEquals(1, userWithRemovedSector.getSectorIds().size());
+        assertTrue(userWithRemovedSector.getSectorIds().contains(mockSector1Deep.getId()));
+        assertFalse(userWithRemovedSector.getSectorIds().contains(mockSector2Deep1.getId()));
         assertEquals(userAfterRemoveDto, userWithRemovedSector);
     }
 
@@ -202,7 +192,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("Remove sector from User failed - sector not found by id")
     void removeSectorFromUserFailedNotFoundSector() {
-        UserDto userDto = UserDto.builder().id(1L).name("Aleksandr").isTermsAgreed(true).build();
+        UserDto userDto = UserDto.builder().id(1L).name("Aleksandr").termsAgreed(true).build();
         User user = userMapper.toEntity(userDto);
         Long sector_id = 2L;
         String errorMsg = "Sector#%s not found".formatted(sector_id);
@@ -223,8 +213,8 @@ public class UserServiceTest {
     @Test
     @DisplayName("Edit User data")
     void editUser() {
-        User user = User.builder().id(1L).name("Aleksandr").isTermsAgreed(true).build();
-        UserDto userDto = UserDto.builder().id(1L).name("Robert").isTermsAgreed(true).build();
+        User user = User.builder().id(1L).name("Aleksandr").termsAgreed(true).build();
+        UserDto userDto = UserDto.builder().id(1L).name("Robert").termsAgreed(true).build();
 
         when(userRepository.findById(userDto.getId())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -243,7 +233,7 @@ public class UserServiceTest {
     @Test
     @DisplayName("Edit User data failed - user not found")
     void editUserFailedNotFoundUser() {
-        UserDto userDto = UserDto.builder().id(1L).name("Aleksandr").isTermsAgreed(true).build();
+        UserDto userDto = UserDto.builder().id(1L).name("Aleksandr").termsAgreed(true).build();
         String errorMsg = "User#%s not found".formatted(userDto.getId());
         when(userRepository.findById(any())).thenThrow(new AppException(errorMsg, 404));
 

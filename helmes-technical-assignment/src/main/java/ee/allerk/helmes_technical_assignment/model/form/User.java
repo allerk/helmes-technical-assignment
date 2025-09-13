@@ -28,7 +28,7 @@ public class User extends AbstractEntity {
     private String name;
 
     @Column(name = "is_terms_agreed")
-    private boolean isTermsAgreed;
+    private boolean termsAgreed;
 
     @ManyToMany
     @JoinTable(

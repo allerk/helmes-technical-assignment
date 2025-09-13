@@ -13,6 +13,6 @@ import java.util.Set;
 public class UserDto {
     private Long id;
     private String name;
-    private boolean isTermsAgreed;
-    private Set<SectorDto> sectors = new HashSet<>();
+    private boolean termsAgreed;
+    private Set<Long> sectorIds = new HashSet<>();
 }
