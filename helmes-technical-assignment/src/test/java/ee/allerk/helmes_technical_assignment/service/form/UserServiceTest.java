@@ -33,7 +33,7 @@ import static org.mockito.Mockito.any;
 public class UserServiceTest {
 
     @Spy
-    private UserMapper userMapper = new UserMapperImpl();;
+    private UserMapper userMapper = new UserMapperImpl();
 
     @Captor
     private ArgumentCaptor<User> userCaptor;
