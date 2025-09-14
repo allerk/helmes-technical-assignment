@@ -42,4 +42,23 @@ public interface UserMapper extends EntityMapper<User, UserDto> {
     @Override
     @Mapping(target = "sectors", source = "sectorIds")
     User toEntity(UserDto dto);
+
+    @Override
+    @Mapping(target = "sectors", source = "sectorIds")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    default void partialUpdate(@MappingTarget User entity, UserDto dto) {
+        if (dto == null) return;
+
+        if (dto.getName() != null && !dto.getName().isBlank()) {
+            entity.setName(dto.getName());
+        }
+
+        if (dto.getTermsAgreed() != null) {
+            entity.setTermsAgreed(dto.getTermsAgreed());
+        }
+
+        if (dto.getSectorIds() != null && !dto.getSectorIds().isEmpty()) {
+            entity.setSectors(mapIdsToSectors(dto.getSectorIds()));
+        }
+    }
 }

@@ -30,7 +30,30 @@ public class UserService {
         if (userRepository.findByName(name).isPresent()) {
             throw new AppException("User with name %s already exists".formatted(name), 409);
         }
-        Set<Sector> sectors = sectorService.findByIds(userDto.getSectorIds());
+        validateSelectedSectors(userDto.getSectorIds());
+        User entity = userMapper.toEntity(userDto);
+        User saved = userRepository.save(entity);
+        return userMapper.toDto(saved);
+    }
+
+    @Transactional
+    public UserDto partialUpdate(UserDto userDto) {
+        User user = userRepository.findById(userDto.getId()).orElseThrow(() -> new AppException("User#" + userDto.getId() + " not found", 404));
+        validateSelectedSectors(userDto.getSectorIds());
+        userMapper.partialUpdate(user, userDto);
+        userRepository.save(user);
+        return userMapper.toDto(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new AppException("User#" + id + " not found", 404));
+        return userMapper.toDto(user);
+    }
+
+    @Transactional(readOnly = true)
+    protected void validateSelectedSectors(Set<Long> sectorIds) {
+        Set<Sector> sectors = sectorService.findByIds(sectorIds);
         List<String> invalidSectors = sectors.stream()
                 .filter(s -> !s.getChildren().isEmpty())
                 .map(Sector::getLabel)
@@ -43,33 +66,5 @@ public class UserService {
                     302
             );
         }
-        User entity = userMapper.toEntity(userDto);
-        User saved = userRepository.save(entity);
-        return userMapper.toDto(saved);
-    }
-
-    @Transactional
-    public UserDto removeSector(Long user_id, Long sector_id) {
-        User user = userRepository.findById(user_id)
-                .orElseThrow(() -> new AppException("User#%s not found".formatted(user_id), 404));
-
-        Optional<Sector> sector = sectorService.findOneById(sector_id);
-
-        if (sector.isEmpty()) {
-            throw new AppException("Sector#%s not found".formatted(sector_id), 404);
-        }
-
-        user.setSectors(user.getSectors().stream().filter((s -> !s.getId().equals(sector_id))).collect(Collectors.toSet()));
-
-        return userMapper.toDto(userRepository.save(user));
-    }
-
-    @Transactional
-    public UserDto partialUpdate(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId()).orElseThrow(() -> new AppException("User#" + userDto.getId() + " not found", 404));
-
-        userMapper.partialUpdate(user, userDto);
-        userRepository.save(user);
-        return userMapper.toDto(user);
     }
 }
