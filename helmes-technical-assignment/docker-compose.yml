@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  helmes-technical-assignment-db:
+    container_name: helmes-technical-assignment-db
+    image: postgres:latest
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=
+    ports:
+      - '5432:5432'
+    expose:
+      - '5432'
+    volumes:
+      - helmes-technical-assignment-db:/var/lib/postgresql/data
+  helmes-technical-assignment-app:
+    container_name: helmes-technical-assignment-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: helmes-technical-assignment-app:latest
+    restart: unless-stopped
+    ports:
+      - '8080:8080'
+    env_file:
+      - .env
+    depends_on:
+      - helmes-technical-assignment-db
+volumes:
+  helmes-technical-assignment-db:
