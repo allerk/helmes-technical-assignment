@@ -2,7 +2,8 @@
     <th:block th:each="sector : ${sectors}">
         <option th:value="${sector.id}"
                 th:text="${sector.label}"
-                th:style="|padding-left: ${level * 20}px|">
+                th:style="|padding-left: ${level * 20}px|"
+                th:disabled="${sector.children != null and !sector.children.isEmpty()}">
         </option>
 
         <th:block th:if="${sector.children != null and !sector.children.isEmpty()}"

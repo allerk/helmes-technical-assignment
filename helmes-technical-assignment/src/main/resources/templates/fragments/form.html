@@ -1,21 +1,13 @@
-<th:block th:fragment="form(user, sectors)">
-    <form action="#" th:action="@{/}" th:object="${user}" method="post">
-        <label for="name">Name</label>
-        <input type="text" th:field="*{name}" id="name" placeholder="Name">
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-
-        <br/><br/>
-        <label for="sectors">Sectors:</label><br />
-        <select id="sectors" multiple size="10" th:field="*{sectorIds}">
-            <th:block th:insert="fragments/sector-options :: options(${sectors}, 0)"></th:block>
-        </select>
-        <span th:if="${#fields.hasErrors('sectorIds')}" th:errors="*{sectorIds}"></span>
-
-        <br/><br/>
-        <input type="checkbox" th:field="*{termsAgreed}"> Agree to terms
-        <span th:if="${#fields.hasErrors('termsAgreed')}" th:errors="*{termsAgreed}"></span>
-
-        <br/><br/>
-        <input type="submit" value="Add User">
+<th:block th:fragment="form(user, sectors, isEdit)">
+    <form th:if="${!isEdit}" th:action="@{/}" th:object="${user}" method="post">
+        Please enter your name and pick the Sectors you are currently involved in.
+        <br />
+        <br />
+        <th:block th:insert="fragments/form-fields :: fields(${user}, ${sectors}, ${isEdit})"></th:block>
+    </form>
+    <form th:if="${isEdit}" th:action="@{/edit}" th:object="${user}" method="post">
+        Edit your name or Sectors you are currently involved in.
+        <input type="hidden" th:field="*{id}" />
+        <th:block th:insert="fragments/form-fields :: fields(${user}, ${sectors}, ${isEdit})"></th:block>
     </form>
 </th:block>

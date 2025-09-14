@@ -1,5 +1,7 @@
-Please enter your name and pick the Sectors you are currently involved in.
-<br />
-<br />
-
-<th:block th:insert="fragments/form :: form(${user}, ${sectors})"></th:block>
+<div th:if="${userError}" style="color:red;">
+    <p th:text="${userError}"></p>
+    <a th:href="@{/}">Back to the main page</a>
+</div>
+<th:block th:if="${userError == null}"
+          th:insert="fragments/form :: form(${user}, ${sectors}, ${isEdit})">
+</th:block>

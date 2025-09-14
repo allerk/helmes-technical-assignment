@@ -1,0 +1,23 @@
+<th:block th:fragment="fields(user, sectors, isEdit)">
+    <br/><br/>
+    <label for="name">Name</label>
+    <input type="text" th:field="*{name}" id="name" placeholder="Name">
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+
+    <br/><br/>
+    <label for="sectors">Sectors:</label><br />
+    <select id="sectors" multiple size="10" th:field="*{sectorIds}">
+        <th:block th:insert="fragments/sector-options :: options(${sectors}, 0)"></th:block>
+    </select>
+    <span th:if="${#fields.hasErrors('sectorIds')}" th:errors="*{sectorIds}"></span>
+
+    <br/><br/>
+    <input type="checkbox" th:field="*{termsAgreed}"> Agree to terms
+    <span th:if="${#fields.hasErrors('termsAgreed')}" th:errors="*{termsAgreed}"></span>
+
+    <br/><br/>
+    <button type="submit" name="action" value="save"
+            th:text="${isEdit} ? 'Edit' : 'Save'">
+    </button>
+    <a th:if="${isEdit}" th:href="@{/}">Back to the main page</a>
+</th:block>
