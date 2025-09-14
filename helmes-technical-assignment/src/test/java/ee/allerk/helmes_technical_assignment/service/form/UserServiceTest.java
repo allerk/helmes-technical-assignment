@@ -1,29 +1,21 @@
 package ee.allerk.helmes_technical_assignment.service.form;
 
-import ee.allerk.helmes_technical_assignment.dto.form.SectorDto;
 import ee.allerk.helmes_technical_assignment.dto.form.UserDto;
 import ee.allerk.helmes_technical_assignment.exceptions.AppException;
-import ee.allerk.helmes_technical_assignment.mapper.form.SectorMapper;
-import ee.allerk.helmes_technical_assignment.mapper.form.SectorMapperImpl;
 import ee.allerk.helmes_technical_assignment.mapper.form.UserMapper;
 import ee.allerk.helmes_technical_assignment.mapper.form.UserMapperImpl;
 import ee.allerk.helmes_technical_assignment.model.form.Sector;
 import ee.allerk.helmes_technical_assignment.model.form.User;
 import ee.allerk.helmes_technical_assignment.repository.form.UserRepository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.Optional;
 
@@ -43,26 +35,14 @@ public class UserServiceTest {
     @Spy
     private UserMapper userMapper = new UserMapperImpl();;
 
-    @Spy
-    private SectorMapper sectorMapper = new SectorMapperImpl();;
-
     @Captor
     private ArgumentCaptor<User> userCaptor;
 
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private SectorService sectorService;
-
     @InjectMocks
     private UserService userService;
-
-
-//    @BeforeEach
-//    public void iniMapperDependencies(){
-//        ReflectionTestUtils.setField(userMapper,"sectorMapper",sectorMapper);
-//    }
 
     @Test
     @DisplayName("Add new User")

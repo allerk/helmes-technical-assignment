@@ -1,6 +1,11 @@
 package ee.allerk.helmes_technical_assignment.mapper.common;
 
-import org.mapstruct.*;
+import org.mapstruct.IterableMapping;
+import org.mapstruct.NullValueMappingStrategy;
+import org.mapstruct.Named;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 

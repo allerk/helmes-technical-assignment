@@ -4,7 +4,15 @@ import ee.allerk.helmes_technical_assignment.dto.form.UserDto;
 import ee.allerk.helmes_technical_assignment.mapper.common.EntityMapper;
 import ee.allerk.helmes_technical_assignment.model.form.Sector;
 import ee.allerk.helmes_technical_assignment.model.form.User;
-import org.mapstruct.*;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
+import org.mapstruct.Mapping;
+import org.mapstruct.IterableMapping;
+import org.mapstruct.NullValueMappingStrategy;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.MappingTarget;
 
 import java.util.HashSet;
 import java.util.List;

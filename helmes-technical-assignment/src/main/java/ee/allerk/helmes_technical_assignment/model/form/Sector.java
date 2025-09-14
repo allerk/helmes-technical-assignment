@@ -1,7 +1,17 @@
 package ee.allerk.helmes_technical_assignment.model.form;
 
 import ee.allerk.helmes_technical_assignment.model.common.AbstractEntity;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.ManyToMany;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
