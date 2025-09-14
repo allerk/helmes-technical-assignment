@@ -6,8 +6,9 @@ import ee.allerk.helmes_technical_assignment.mapper.form.UserMapper;
 import ee.allerk.helmes_technical_assignment.model.form.Sector;
 import ee.allerk.helmes_technical_assignment.model.form.User;
 import ee.allerk.helmes_technical_assignment.repository.form.UserRepository;
+
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Slf4j
 @AllArgsConstructor
 public class UserService {
     private final SectorService sectorService;
