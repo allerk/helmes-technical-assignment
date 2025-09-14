@@ -14,7 +14,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -103,40 +102,6 @@ public class SectorServiceTest {
         for (Sector child : mockSector2Deep2.getChildren()) {
             assertEquals(3L, child.getParent().getId());
         }
-    }
-
-    @Test
-    @DisplayName("Find User Sectors")
-    void findUserSectors() {
-        Long userId = 1L;
-
-        Sector relatedSector = Sector.builder()
-                .id(1L)
-                .label("Manufacturing")
-                .build();
-        Sector notRelatedSector = Sector.builder()
-                .id(2L)
-                .label("Construction materials")
-                .build();
-
-        List<Sector> sectors = List.of(relatedSector);
-        List<SectorDto> expectedDtos = List.of(
-                sectorMapper.toDto(relatedSector)
-        );
-
-        when(sectorRepository.findAllByUserId(userId)).thenReturn(sectors);
-        when(sectorMapper.toDtos(anyList())).thenReturn(expectedDtos);
-
-        List<SectorDto> results = sectorService.findUserSectors(userId);
-
-        verify(sectorRepository, times(1)).findAllByUserId(userId);
-        verify(sectorMapper, times(1)).toDtos(sectors);
-
-        assertNotNull(results);
-        assertEquals(expectedDtos.size(), results.size());
-        assertEquals("Manufacturing", results.get(0).getLabel());
-
-        assertTrue(results.stream().noneMatch(s -> s.getLabel().equals(notRelatedSector.getLabel())));
     }
 
     @Test

@@ -10,9 +10,6 @@ import java.util.Set;
 
 @Repository
 public interface SectorRepository extends EntityRepository<Sector> {
-    @Query("SELECT s from Sector s JOIN s.users u WHERE u.id = :userId")
-    List<Sector> findAllByUserId(Long userId);
-
     @Query("SELECT s FROM Sector s WHERE s.id IN :ids")
     List<Sector> findByIds(Set<Long> ids);
 

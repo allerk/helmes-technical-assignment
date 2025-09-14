@@ -28,18 +28,7 @@ public class SectorService {
     }
 
     @Transactional(readOnly = true)
-    public List<SectorDto> findUserSectors(Long userId) {
-        List<Sector> sectors = sectorRepository.findAllByUserId(userId);
-        return sectorMapper.toDtos(sectors);
-    }
-
-    @Transactional(readOnly = true)
     public Set<Sector> findByIds(Set<Long> ids) {
         return new HashSet<>(sectorRepository.findByIds(ids));
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Sector> findOneById(Long id) {
-        return sectorRepository.findById(id);
     }
 }
