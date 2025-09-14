@@ -3,13 +3,16 @@ package ee.allerk.helmes_technical_assignment.utils;
 import ee.allerk.helmes_technical_assignment.dto.seeder.SectorNode;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Deque;
+import java.util.Scanner;
 
 public class SectorTsvParser {
 
     public List<SectorNode> parse() {
-        // read the file from src/resources/data
-        // map it to some
+
         List<SectorNode> roots = new ArrayList<>();
         Deque<SectorNode> stack = new ArrayDeque<>();
 
@@ -18,7 +21,6 @@ public class SectorTsvParser {
                 throw new RuntimeException("Sectors file not found!");
             }
             try {
-                // todo: discuss why Scanner, I really have not idea why I picked it. Maybe only because it looks more understandable and small for file reading
                 Scanner scanner = new Scanner(inputStream);
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
@@ -28,7 +30,6 @@ public class SectorTsvParser {
                     SectorNode sectorNode = new SectorNode(line.trim());
 
                     if (depth == 0) {
-                        // this is the first level, so the logic is easier here
                         roots.add(sectorNode);
                         stack.clear();
                         stack.push(sectorNode);

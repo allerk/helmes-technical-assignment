@@ -17,7 +17,6 @@ public class SectorInitializer {
     private final SectorRepository sectorRepository;
 
     public void seedSectors() {
-        // todo: maybe make label unique, so that if there is already record with that name then do not insert
         SectorTsvParser parser = new SectorTsvParser();
         List<SectorNode> sectorNodes = parser.parse();
 
